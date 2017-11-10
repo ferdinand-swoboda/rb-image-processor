@@ -14,4 +14,5 @@ dependencies {
     // https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf
     compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.9.RELEASE'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-simplexml:2.3.0'
 }
