@@ -11,7 +11,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WorksToHTMLTransformation implements Transformation<List<Work>, Map<String, StringWriter>> {
@@ -42,10 +41,20 @@ public class WorksToHTMLTransformation implements Transformation<List<Work>, Map
 
     private Map<String, StringWriter> buildHTMLPages(List<Work> works, Map<String, List<Work>> makeIndex, Map<String, Map<String, List<Work>>> makeAndModelIndex) {
         String indexDocumentName = getDocumentNameForIndexHTMLPage();
-        Map<String, String> cameraMakeToDocumentName = makeIndex.keySet().stream().collect(Collectors.toMap(Function.identity(), cameraMake -> getDocumentNameForCameraMakeHTMLPage(cameraMake)));
-        Map<String, Map<String, String>> cameraMakeAndModelToDocumentName = makeAndModelIndex.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().keySet().stream().collect(Collectors.toMap(Function.identity(), cameraModel -> getDocumentNameForCameraMakeAndModelHTMLPage(entry.getKey(), cameraModel)))));
+        Map<String, String> cameraMakeToDocumentName = new HashMap<>();
+        for(String cameraMake : makeIndex.keySet()) {
+            cameraMakeToDocumentName.put(cameraMake, getDocumentNameForCameraMakeHTMLPage(cameraMake));
+        }
+        Map<String, Map<String, String>> cameraMakeAndModelToDocumentName = new HashMap<>();
+        for(Map.Entry<String, Map<String, List<Work>>> makeAndModelToWorks : makeAndModelIndex.entrySet()) {
+            String cameraMake = makeAndModelToWorks.getKey();
+            cameraMakeAndModelToDocumentName.put(cameraMake, new HashMap<>());
+            for(String cameraModel : makeAndModelToWorks.getValue().keySet()) {
+                cameraMakeAndModelToDocumentName.get(cameraMake).put(cameraMake, getDocumentNameForCameraMakeAndModelHTMLPage(cameraMake, cameraModel));
+            }
+        }
 
-        // then create the html pages and map the document name to the corresponding html page
+        // then create the html pages and map the previously created document name to the corresponding html page
         StringWriter htmlPage = null;
         Map<String, StringWriter> documentNameToHTMLPage = new HashMap<>();
 
@@ -54,10 +63,20 @@ public class WorksToHTMLTransformation implements Transformation<List<Work>, Map
         documentNameToHTMLPage.put(indexDocumentName, htmlPage);
 
         // for each camera make, map its document name to the created HTML page
-        makeIndex.forEach((cameraMake, worksOfCameraMake) -> documentNameToHTMLPage.put(cameraMakeToDocumentName.get(cameraMake), buildCameraMakeHTMLPage(indexDocumentName, cameraMakeAndModelToDocumentName.get(cameraMake), worksOfCameraMake.subList(0, 10))));
+        for(Map.Entry<String, List<Work>> cameraMakeToWorks : makeIndex.entrySet()) {
+            String cameraMake = cameraMakeToWorks.getKey();
+            List<Work> worksOfCameraMake = cameraMakeToWorks.getValue();
+            htmlPage = buildCameraMakeHTMLPage(indexDocumentName, cameraMakeAndModelToDocumentName.get(cameraMake), worksOfCameraMake.subList(0, 10));
+            documentNameToHTMLPage.put(cameraMakeToDocumentName.get(cameraMake), htmlPage);
 
-        // create a html page for each camera make's model and map its document name to it
-        makeAndModelIndex.forEach((cameraMake, cameraModelToWorks) -> cameraModelToWorks.forEach((cameraModel, worksOfCameraModel) -> documentNameToHTMLPage.put(cameraMakeAndModelToDocumentName.get(cameraMake).get(cameraModel), buildCameraMakeAndModelHTMLPage(indexDocumentName, cameraMakeToDocumentName.get(cameraMake), worksOfCameraModel.subList(0, 10)))));
+            for(Map.Entry<String, List<Work>> cameraModelToWorks : makeAndModelIndex.get(cameraMake).entrySet()) {
+                // create a html page for each camera make's model and map its document name to it
+                String cameraModel = cameraModelToWorks.getKey();
+                List<Work> worksOfCameraModel = cameraModelToWorks.getValue();
+                htmlPage = buildCameraMakeAndModelHTMLPage(indexDocumentName, cameraMakeToDocumentName.get(cameraMake), worksOfCameraModel.subList(0, 10));
+                documentNameToHTMLPage.put(cameraMakeAndModelToDocumentName.get(cameraMake).get(cameraModel), htmlPage);
+            }
+        }
 
         return documentNameToHTMLPage;
     }
