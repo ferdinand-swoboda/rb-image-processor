@@ -20,7 +20,9 @@ public class HTMLToLocalFilesystemDataTarget implements DataTarget<Map<String, S
     public void write(Map<String, StringWriter> htmlPages) throws IOException{
 
         if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs();
+            if(!outputDirectory.mkdirs()) {
+                throw new IOException("Directory " + outputDirectory.getAbsolutePath() + " or its parent directories could not be created!");
+            }
         }
 
         for(Map.Entry<String, StringWriter> htmlPage : htmlPages.entrySet()) {
@@ -28,12 +30,10 @@ public class HTMLToLocalFilesystemDataTarget implements DataTarget<Map<String, S
             String fileName = htmlPage.getKey();
             File file = new File(outputDirectory, fileName);
 
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e){
-                    throw new IOException("File " + file.getAbsolutePath() + " could not be created!", e);
-                }
+            try {
+                file.createNewFile();
+            } catch (IOException e){
+                throw new IOException("File " + file.getAbsolutePath() + " could not be created!", e);
             }
 
             try(FileWriter fileWriter = new FileWriter(file, false)) {

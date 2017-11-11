@@ -55,7 +55,7 @@ public class WorksToHTMLTransformation implements Transformation<List<Work>, Map
         }
 
         // then create the html pages and map the previously created document name to the corresponding html page
-        StringWriter htmlPage = null;
+        StringWriter htmlPage;
         Map<String, StringWriter> documentNameToHTMLPage = new HashMap<>();
 
         // create the index html page and map its document name to it

@@ -2,7 +2,7 @@ package datasource;
 
 import java.io.IOException;
 
-public interface DataSource<Type extends Object> {
+public interface DataSource<Type> {
 
     Type read() throws IOException;
 }

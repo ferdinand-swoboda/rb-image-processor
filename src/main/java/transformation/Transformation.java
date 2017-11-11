@@ -1,6 +1,6 @@
 package transformation;
 
-public interface Transformation<SourceType extends Object, TargetType extends Object> {
+public interface Transformation<SourceType, TargetType> {
 
     TargetType apply(SourceType source);
 }

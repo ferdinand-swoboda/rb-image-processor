@@ -21,7 +21,7 @@ public class RemoteXMLToWorksDataSource implements DataSource<List<Work>> {
 
     @Override
     public List<Work> read() throws IOException{
-        List<Work> result = null;
+        List<Work> result;
         Response<List<Work>> response = webservice.getWorks().execute();
         if (response.isSuccessful()) {
             result = response.body();
