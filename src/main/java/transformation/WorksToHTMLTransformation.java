@@ -1,8 +1,6 @@
 package transformation;
 
 import domain.Work;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -64,49 +62,89 @@ public class WorksToHTMLTransformation implements Transformation<List<Work>, Map
         return buildHTMLPages(indexImageUrls, imageUrlsPerCameraMake, imageUrlsPerCameraMakeAndModel);
     }
 
-    private Map<String, StringWriter> buildHTMLPages(List<String> indexImageUrls, Map<String, List<String>> imageUrlsPerCameraMake, Map<String, Map<String, List<String>>> imageUrlsPerCameraMakeAndModel) {
-        Map<String, StringWriter> htmlPages = new HashMap<>();
+    private Map<String, StringWriter> buildHTMLPages(List<String> indexImageUrls, Map<String, List<String>> cameraMakeToImageUrls, Map<String, Map<String, List<String>>> cameraMakeAndModelToImageUrls) {
+        String indexDocumentName = getDocumentNameForIndexHTMLPage();
+        Map<String, String> cameraMakeToDocumentName = new HashMap<>();
+        Map<String, Map<String, String>> cameraMakeAndModelToDocumentName = new HashMap<>();
 
-        Pair<String, StringWriter> htmlPage = buildIndexHTMLPage(indexImageUrls);
-        htmlPages.put(htmlPage.getKey(), htmlPage.getValue());
-
-        for(Map.Entry<String, List<String>> imageUrlsOfCameraMake : imageUrlsPerCameraMake.entrySet()) {
+        // first, initialise the mappings from images by a camera make (e.g. "SUPERCAM") to associated document name (e.g. imagesOf_SUPERCAM.html)
+        for(Map.Entry<String, List<String>> imageUrlsOfCameraMake : cameraMakeToImageUrls.entrySet()) {
             String cameraMake = imageUrlsOfCameraMake.getKey();
-            htmlPage = buildCameraMakeHTMLPage(cameraMake, imageUrlsOfCameraMake.getValue());
-            htmlPages.put(htmlPage.getKey(), htmlPage.getValue());
+            cameraMakeToDocumentName.put(cameraMake, getDocumentNameForCameraMakeHTMLPage(cameraMake));
+            cameraMakeAndModelToDocumentName.put(cameraMake, new HashMap<>());
 
-            for(Map.Entry<String, List<String>> imageUrlsOfCameraMakeAndModel : imageUrlsPerCameraMakeAndModel.get(cameraMake).entrySet()) {
+            // second, initialise the mappings from images by a camera model (e.g. "S3000") to associated document name (e.g. imagesOf_SUPERCAM_S3000.html)
+            for(Map.Entry<String, List<String>> imageUrlsOfCameraMakeAndModel : cameraMakeAndModelToImageUrls.get(cameraMake).entrySet()) {
                 String cameraModel = imageUrlsOfCameraMakeAndModel.getKey();
-                htmlPage = buildCameraMakeAndModelHTMLPage(cameraMake, cameraModel, imageUrlsOfCameraMake.getValue());
-                htmlPages.put(htmlPage.getKey(), htmlPage.getValue());
+                cameraMakeAndModelToDocumentName.get(cameraMake).put(cameraModel, getDocumentNameForCameraMakeAndModelHTMLPage(cameraMake, cameraModel));
             }
         }
 
-        return htmlPages;
+
+        // then create the html pages and map the document name to the corresponding html page
+        Map<String, StringWriter> documentNameToHTMLPage = new HashMap<>();
+
+        // create the index page and map its document name to it
+        documentNameToHTMLPage.put(indexDocumentName, buildIndexHTMLPage(cameraMakeToDocumentName, indexImageUrls));
+
+        // for each camera make,
+        for(Map.Entry<String, String> cameraMake : cameraMakeToDocumentName.entrySet()) {
+            // create a page
+            StringWriter htmlPage = buildCameraMakeHTMLPage(indexDocumentName, cameraMakeAndModelToDocumentName.get(cameraMake.getKey()), cameraMake.getKey(), cameraMakeToImageUrls.get(cameraMake));
+            documentNameToHTMLPage.put(cameraMake.getKey(), htmlPage);
+
+            // and create a page for each camera model of that camera make
+            for(Map.Entry<String, String> cameraModel : cameraMakeAndModelToDocumentName.get(cameraMake.getKey()).entrySet()) {
+                htmlPage = buildCameraMakeAndModelHTMLPage(indexDocumentName, cameraMakeToDocumentName.get(cameraMake), cameraMake.getKey(), cameraModel.getKey(), cameraMakeAndModelToImageUrls.get(cameraMake).get(cameraModel));
+                documentNameToHTMLPage.put(cameraModel.getKey(), htmlPage);
+            }
+        }
+
+        return documentNameToHTMLPage;
     }
 
-    private Pair<String, StringWriter> buildIndexHTMLPage(List<String> imageUrls) {
-        String documentName = "index.html";
+    private StringWriter buildIndexHTMLPage( Map<String, String> cameraMakeToDocumentName, List<String> imageUrls) {
         StringWriter htmlDocument = new StringWriter();
         Context context = new Context();
+        context.setVariable("cameraMakePageLinks", cameraMakeToDocumentName);
         context.setVariable("imageUrls", imageUrls);
         templateEngine.process("index", context, htmlDocument);
-        return new ImmutablePair<>(documentName, htmlDocument);
+        return htmlDocument;
     }
 
-    private Pair<String, StringWriter> buildCameraMakeHTMLPage(String cameraMake, List<String> imageUrls) {
-        String documentName = "imagesOf_" + cameraMake.trim().replaceAll(" +", "-") + ".html";
+    private StringWriter buildCameraMakeHTMLPage(String indexDocumentName, Map<String, String> cameraModelToDocumentName, String cameraMake, List<String> imageUrls) {
         StringWriter htmlDocument = new StringWriter();
         Context context = new Context();
+        context.setVariable("indexPageLink", indexDocumentName);
+        context.setVariable("cameraModelPageLinks", cameraModelToDocumentName);
+        context.setVariable("imageUrls", imageUrls);
+        context.setVariable("currentMake", cameraMake);
         templateEngine.process("imagesByCameraMake", context, htmlDocument);
-        return new ImmutablePair<>(documentName, htmlDocument);
+        return htmlDocument;
     }
 
-    private Pair<String, StringWriter> buildCameraMakeAndModelHTMLPage(String cameraMake, String cameraModel, List<String> imageUrls) {
-        String documentName = "imagesOf_" + cameraMake.trim().replaceAll(" +", "-") + "_" + cameraModel.trim().replaceAll(" +", "-") + ".html";
+    private StringWriter buildCameraMakeAndModelHTMLPage(String indexDocumentName, String cameraMakeDocumentName, String cameraMake, String cameraModel, List<String> imageUrls) {
         StringWriter htmlDocument = new StringWriter();
         Context context = new Context();
+        context.setVariable("indexPageLink", indexDocumentName);
+        context.setVariable("cameraMakePageLink", cameraMakeDocumentName);
+        context.setVariable("imageUrls", imageUrls);
+        context.setVariable("currentMake", cameraMake);
+        context.setVariable("currentModel", cameraModel);
         templateEngine.process("imagesByCameraMakeAndModel", context, htmlDocument);
-        return new ImmutablePair<>(documentName, htmlDocument);
+        return htmlDocument;
     }
+
+    private String getDocumentNameForIndexHTMLPage() {
+        return "index.html";
+    }
+
+    private String getDocumentNameForCameraMakeHTMLPage(String cameraMake) {
+        return "imagesOf_" + cameraMake.trim().replaceAll(" +", "-") + ".html";
+    }
+
+    private String getDocumentNameForCameraMakeAndModelHTMLPage(String cameraMake, String cameraModel) {
+        return "imagesOf_" + cameraMake.trim().replaceAll(" +", "-") + "_" + cameraModel.trim().replaceAll(" +", "-") + ".html";
+    }
+
 }

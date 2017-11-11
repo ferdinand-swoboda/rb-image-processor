@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Images of th:text="${work.make}"</title>
+    <title th:text="Images of ${currentMake}"></title>
     <style type="text/css">
         nav {
             margin: 10px;
@@ -12,23 +12,17 @@
 </head>
 <body>
 <header>
-    <h1>Images of th:text="${work.make}"</h1>
+    <h1 th:text="Images of ${currentMake}"></h1>
 
     <nav>
-        <a href="/html/">All Images</a> |
-        Images of
-        <div class="form-group row">
-            <select class="form-control" id="status" name="status">
-                <option th:each="stat : ${statuses}"
-                        th:value="${stat}"
-                        th:text="${stat}"
-                        th:selected="${stat.equals(group.status)}"
-                        href=""/>
-            </select>
-        </div>
+        <a href="${indexPageLink}">All Images</a> |
+        <a th:each="cameraModelPageLink : ${cameraModelPageLinks}" th:text="Images of ${cameraModelPageLink.key}" href="${cameraModelPageLink.value}"></a> |
     </nav>
 </header>
 
-<img alt="Image" th:src="@{image/userprofile}" width="250" height="250"/>
+<div th:each="imageUrl : ${imageUrls}">
+    <img src=${imageUrl} alt="Work image" />
+</div>
+
 </body>
 </html>

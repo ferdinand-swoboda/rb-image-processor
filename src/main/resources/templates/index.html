@@ -15,10 +15,14 @@
     <h1>Images</h1>
 
     <nav>
-        {{ NAVIGATION GOES HERE }}
+        <a th:each="cameraMakePageLink : ${cameraMakePageLinks}" th:text="Images of ${cameraMakePageLink.key}" href="${cameraMakePageLink.value}"></a> |
     </nav>
+
 </header>
 
-{{ THUMBNAIL IMAGES GO HERE }}
+<div th:each="imageUrl : ${imageUrls}">
+    <img src=${imageUrl} alt="Work image" />
+</div>
+
 </body>
 </html>

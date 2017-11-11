@@ -1,5 +1,5 @@
 import datasource.DataSource;
-import datasource.remote.RemoteXMLToWorkDataSource;
+import datasource.remote.RemoteXMLToWorksDataSource;
 import datatarget.DataTarget;
 import datatarget.local.HTMLToLocalFilesystemDataTarget;
 import domain.Work;
@@ -42,7 +42,7 @@ public class ImageProcessor {
     }
 
     private void init(URL apiUrl, File outputDir) {
-        source = new RemoteXMLToWorkDataSource(apiUrl);
+        source = new RemoteXMLToWorksDataSource(apiUrl);
         target = new HTMLToLocalFilesystemDataTarget(outputDir);
     }
 
