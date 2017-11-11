@@ -20,8 +20,8 @@
 
 </header>
 
-<div th:each="imageUrl : ${imageUrls}">
-    <img src=${imageUrl} alt="Work image" />
+<div th:each="work : ${works}">
+    <img src=${work.urlsOfImages[2]} alt="Work image" />
 </div>
 
 </body>

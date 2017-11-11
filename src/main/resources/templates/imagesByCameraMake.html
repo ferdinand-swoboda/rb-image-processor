@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title th:text="Images of ${currentMake}"></title>
+    <title th:text="Images of ${works[0].exif_make}"></title>
     <style type="text/css">
         nav {
             margin: 10px;
@@ -12,7 +12,7 @@
 </head>
 <body>
 <header>
-    <h1 th:text="Images of ${currentMake}"></h1>
+    <h1 th:text="Images of ${works[0].exif_make}"></h1>
 
     <nav>
         <a href="${indexPageLink}">All Images</a> |
@@ -20,8 +20,8 @@
     </nav>
 </header>
 
-<div th:each="imageUrl : ${imageUrls}">
-    <img src=${imageUrl} alt="Work image" />
+<div th:each="work : ${works}">
+    <img src=${work.urlsOfImages[2]} alt="Work image" />
 </div>
 
 </body>
