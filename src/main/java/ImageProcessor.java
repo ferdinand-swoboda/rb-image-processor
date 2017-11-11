@@ -1,20 +1,22 @@
-import datasource.Datasource;
-import datasource.remote.RemoteWorkDatasource;
-import datatarget.Datatarget;
-import datatarget.local.LocalFileDatatarget;
+import datasource.DataSource;
+import datasource.remote.RemoteXMLToWorkDataSource;
+import datatarget.DataTarget;
+import datatarget.local.HTMLToLocalFilesystemDataTarget;
 import domain.Work;
-import transformation.WorksToHTMLFilesTransformation;
+import transformation.WorksToHTMLTransformation;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 public class ImageProcessor {
 
-    private Datasource<List<Work>> source;
-    private Datatarget<File> target;
+    private DataSource<List<Work>> source;
+    private DataTarget<Map<String, StringWriter>> target;
 
     public static void main(String[] args) {
 
@@ -40,12 +42,13 @@ public class ImageProcessor {
     }
 
     private void init(URL apiUrl, File outputDir) {
-        source = new RemoteWorkDatasource(apiUrl);
-        target = new LocalFileDatatarget(outputDir);
+        source = new RemoteXMLToWorkDataSource(apiUrl);
+        target = new HTMLToLocalFilesystemDataTarget(outputDir);
     }
 
     private void run() {
         List<Work> works = null;
+
         try {
             works = source.read();
         } catch (IOException e) {
@@ -53,7 +56,15 @@ public class ImageProcessor {
             e.printStackTrace();
             System.exit(1);
         }
-        File htmlPages = new WorksToHTMLFilesTransformation().apply(works);
-        target.write(htmlPages);
+
+        Map<String, StringWriter> htmlPages = new WorksToHTMLTransformation().apply(works);
+
+        try {
+            target.write(htmlPages);
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing to the data target!");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }

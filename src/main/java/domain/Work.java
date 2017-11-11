@@ -22,7 +22,7 @@ public class Work {
 
     @Element(name = "make")
     @Path("exif")
-    private String exit_make;
+    private String exif_make;
 
     public int getId() {
         return id;
@@ -48,11 +48,11 @@ public class Work {
         this.exif_model = exif_model;
     }
 
-    public String getExit_make() {
-        return exit_make;
+    public String getExif_make() {
+        return exif_make;
     }
 
-    public void setExit_make(String exit_make) {
-        this.exit_make = exit_make;
+    public void setExif_make(String exif_make) {
+        this.exif_make = exif_make;
     }
 }
