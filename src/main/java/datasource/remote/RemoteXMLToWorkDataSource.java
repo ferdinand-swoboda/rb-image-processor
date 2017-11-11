@@ -1,6 +1,6 @@
 package datasource.remote;
 
-import datasource.Datasource;
+import datasource.DataSource;
 import domain.Work;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class RemoteWorkDatasource implements Datasource<List<Work>> {
+public class RemoteXMLToWorkDataSource implements DataSource<List<Work>> {
 
     private WorkWebservice webservice;
 
-    public RemoteWorkDatasource(URL apiUrl) {
+    public RemoteXMLToWorkDataSource(URL apiUrl) {
         webservice = new Retrofit.Builder()
                 .baseUrl(apiUrl.toString()).addConverterFactory(SimpleXmlConverterFactory.create()).build().create(WorkWebservice.class);
     }
