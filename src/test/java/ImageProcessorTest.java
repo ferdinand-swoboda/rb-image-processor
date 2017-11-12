@@ -12,7 +12,7 @@ public class ImageProcessorTest {
     @Test
     public void processImagesShouldResultIn2CanonModelPages() throws IOException{
         String[] args = new String[2];
-        args[0] = "http://take-home-test.herokuapp.com/api/v1/works.xml";
+        args[0] = "http://take-home-test.herokuapp.com/api/";
         Path outputDir = Files.createTempDirectory("image-processor-test-output");
         args[1] = outputDir.toString();
         ImageProcessor.main(args);

@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title th:text="Images of ${works[0].exif_make}"></title>
+    <title th:text="|Images of ${works[0].exif_make}|"></title>
     <style type="text/css">
         nav {
             margin: 10px;
@@ -12,16 +12,21 @@
 </head>
 <body>
 <header>
-    <h1 th:text="Images of ${works[0].exif_make}"></h1>
+    <h1 th:text="|Images of ${works[0].exif_make}|"></h1>
 
     <nav>
-        <a href="${indexPageLink}">All Images</a> |
-        <a th:each="cameraModelPageLink : ${cameraModelPageLinks}" th:text="Images of ${cameraModelPageLink.key}" href="${cameraModelPageLink.value}"></a> |
+        <div style="float: left">
+            <a th:href="${indexPageLink}">All Images</a> |
+        </div>
+
+        <div style="float: left" th:each="cameraModelPageLink : ${cameraModelPageLinks}">
+            <a th:text="|Images of ${cameraModelPageLink.key}|" th:href="${cameraModelPageLink.value}"></a> |
+        </div>
     </nav>
 </header>
 
 <div th:each="work : ${works}">
-    <img src=${work.urlsOfImages[2]} alt="Work image" />
+    <img th:src="${work.urlsOfImages['large']}" alt="Work image" />
 </div>
 
 </body>

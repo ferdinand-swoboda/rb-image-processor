@@ -30,6 +30,14 @@ public class Work {
         this.exif_make = exif_make;
     }
 
+    public Map<String, String> getUrlsOfImages() {
+        return urlsOfImages;
+    }
+
+    public void setUrlsOfImages(Map<String, String> urlsOfImages) {
+        this.urlsOfImages = urlsOfImages;
+    }
+
     public int getId() {
         return id;
     }

@@ -27,7 +27,7 @@ public class WorksToHTMLTextsTransformationTest {
         Map<String, StringWriter> pages = transformation.apply(createWorks());
 
         String expectedIndexPage;
-        try(FileInputStream inputStream = new FileInputStream(getClass().getResource("test_index.html").getFile())) {
+        try(FileInputStream inputStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("test_index.html").getFile())) {
             expectedIndexPage = IOUtils.toString(inputStream, Charset.defaultCharset());
         }
 
@@ -42,14 +42,14 @@ public class WorksToHTMLTextsTransformationTest {
         Map<String, StringWriter> pages = transformation.apply(createWorks());
 
         String expectedNikonPage;
-        try(FileInputStream inputStream = new FileInputStream(getClass().getResource("test_imagesOf_NIKON-CORPORATION.html").getFile())) {
+        try(FileInputStream inputStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("test_imagesOf_NIKON-CORPORATION.html").getFile())) {
             expectedNikonPage = IOUtils.toString(inputStream, Charset.defaultCharset());
         }
 
         String actualNikonPage = pages.get("imagesOf_NIKON-CORPORATION.html").toString();
 
         String expectedCanonPage;
-        try(FileInputStream inputStream = new FileInputStream(getClass().getResource("test_imagesOf_Canon.html").getFile())) {
+        try(FileInputStream inputStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("test_imagesOf_Canon.html").getFile())) {
             expectedCanonPage = IOUtils.toString(inputStream, Charset.defaultCharset());
         }
 
@@ -65,17 +65,15 @@ public class WorksToHTMLTextsTransformationTest {
         Map<String, StringWriter> pages = transformation.apply(createWorks());
 
         String expectedNikonD80Page;
-        try(FileInputStream inputStream = new FileInputStream(getClass().getResource("test_imagesOf_NIKON-CORPORATION_Nikon-D80.html").getFile())) {
+        try(FileInputStream inputStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("test_imagesOf_NIKON-CORPORATION_Nikon-D80.html").getFile())) {
             expectedNikonD80Page = IOUtils.toString(inputStream, Charset.defaultCharset());
         }
-
-        String actualNikonD80Page = pages.get("imagesOf_NIKON-CORPORATION_Nikon-D80.html").toString();
+        String actualNikonD80Page = pages.get("imagesOf_NIKON-CORPORATION_NIKON-D80.html").toString();
 
         String expectedCanonEOS20DPage;
-        try(FileInputStream inputStream = new FileInputStream(getClass().getResource("test_imagesOf_Canon_Canon-EOS-20D.html").getFile())) {
+        try(FileInputStream inputStream = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource("test_imagesOf_Canon_Canon-EOS-20D.html").getFile())) {
             expectedCanonEOS20DPage = IOUtils.toString(inputStream, Charset.defaultCharset());
         }
-
         String actualCanonEOS20DPage = pages.get("imagesOf_Canon_Canon-EOS-20D.html").toString();
 
         Assert.assertEquals(expectedNikonD80Page, actualNikonD80Page);
@@ -84,13 +82,25 @@ public class WorksToHTMLTextsTransformationTest {
 
     private List<Work> createWorks() {
         List<Work> works = new LinkedList<>();
-        works.add(createWork(31820, "http://ih1.redbubble.net/work.31820.1.flat,135x135,075,f.jpg", "http://ih1.redbubble.net/work.31820.1.flat,300x300,075,f.jpg", "http://ih1.redbubble.net/work.31820.1.flat,550x550,075,f.jpg", "NIKON D80", "NIKON CORPORATION")
+        works.add(createWork(31820,
+                "http://ih1.redbubble.net/work.31820.1.flat,135x135,075,f.jpg",
+                "http://ih1.redbubble.net/work.31820.1.flat,300x300,075,f.jpg",
+                "http://ih1.redbubble.net/work.31820.1.flat,550x550,075,f.jpg",
+                "NIKON D80", "NIKON CORPORATION")
         );
 
-        works.add(createWork(867035, "http://ih1.redbubble.net/work.867035.1.flat,135x135,075,f.jpg", "http://ih1.redbubble.net/work.867035.1.flat,300x300,075,f.jpg", "http://ih1.redbubble.net/work.867035.1.flat,550x550,075,f.jpg", null, null)
+        works.add(createWork(867035,
+                "http://ih1.redbubble.net/work.867035.1.flat,135x135,075,f.jpg",
+                "http://ih1.redbubble.net/work.867035.1.flat,300x300,075,f.jpg",
+                "http://ih1.redbubble.net/work.867035.1.flat,550x550,075,f.jpg",
+                null, null)
         );
 
-        works.add(createWork(2041, "http://ih1.redbubble.net/work.2041.1.flat,135x135,075,f.jpg", "http://ih1.redbubble.net/work.2041.1.flat,300x300,075,f.jpg", "http://ih1.redbubble.net/work.2041.1.flat,550x550,075,f.jpg", "Canon EOS 20D", "Canon")
+        works.add(createWork(2041,
+                "http://ih1.redbubble.net/work.2041.1.flat,135x135,075,f.jpg",
+                "http://ih1.redbubble.net/work.2041.1.flat,300x300,075,f.jpg",
+                "http://ih1.redbubble.net/work.2041.1.flat,550x550,075,f.jpg",
+                "Canon EOS 20D", "Canon")
         );
 
         return works;

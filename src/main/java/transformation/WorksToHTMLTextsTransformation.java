@@ -15,13 +15,17 @@ import java.util.stream.Collectors;
 
 public class WorksToHTMLTextsTransformation implements Transformation<List<Work>, Map<String, StringWriter>> {
 
+    private static final int NUMBER_OF_IMAGES_TO_DISPLAY = 10;
+    public static final String TEMPLATES_DIR = "/templates/";
+    public static final String TEMPLATES_SUFFIX = ".html";
+
     private ITemplateEngine templateEngine;
 
     public WorksToHTMLTextsTransformation() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setTemplateMode(TemplateMode.HTML);
-        resolver.setPrefix("/templates/");
-        resolver.setSuffix(".html");
+        resolver.setPrefix(TEMPLATES_DIR);
+        resolver.setSuffix(TEMPLATES_SUFFIX);
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(resolver);
         this.templateEngine = templateEngine;
@@ -30,11 +34,13 @@ public class WorksToHTMLTextsTransformation implements Transformation<List<Work>
     @Override
     public Map<String, StringWriter> apply(List<Work> works) {
 
-        //first, construct an index on the list of works to enable fast search by camera make
-        Map<String, List<Work>> makeIndex = works.stream().collect(Collectors.groupingBy(Work::getExif_make));
+        //first, construct an index on the list of works to enable fast search by camera make; works with no make are ignored
+        Map<String, List<Work>> makeIndex = works.stream().filter(work -> work.getExif_make() != null)
+                .collect(Collectors.groupingBy(Work::getExif_make));
 
-        //second, construct a 2-layered index to enable fast search by camera make and camera model
-        Map<String, Map<String, List<Work>>> makeAndModelIndex = works.stream().collect(Collectors.groupingBy(Work::getExif_make, Collectors.groupingBy(Work::getExif_model)));
+        //second, construct a 2-layered index to enable fast search by camera make and camera model; works with no make or model are ignored
+        Map<String, Map<String, List<Work>>> makeAndModelIndex = works.stream().filter(work -> work.getExif_make() != null && work.getExif_model() != null)
+                .collect(Collectors.groupingBy(Work::getExif_make, Collectors.groupingBy(Work::getExif_model)));
 
         return buildHTMLPages(works, makeIndex, makeAndModelIndex);
     }
@@ -50,7 +56,7 @@ public class WorksToHTMLTextsTransformation implements Transformation<List<Work>
             String cameraMake = makeAndModelToWorks.getKey();
             cameraMakeAndModelToDocumentName.put(cameraMake, new HashMap<>());
             for(String cameraModel : makeAndModelToWorks.getValue().keySet()) {
-                cameraMakeAndModelToDocumentName.get(cameraMake).put(cameraMake, getDocumentNameForCameraMakeAndModelHTMLPage(cameraMake, cameraModel));
+                cameraMakeAndModelToDocumentName.get(cameraMake).put(cameraModel, getDocumentNameForCameraMakeAndModelHTMLPage(cameraMake, cameraModel));
             }
         }
 
@@ -59,21 +65,26 @@ public class WorksToHTMLTextsTransformation implements Transformation<List<Work>
         Map<String, StringWriter> documentNameToHTMLPage = new HashMap<>();
 
         // create the index html page and map its document name to it
-        htmlPage = buildIndexHTMLPage(cameraMakeToDocumentName, works.subList(0, 10));
+        htmlPage = buildIndexHTMLPage(cameraMakeToDocumentName,
+                works.subList(0, (works.size() < NUMBER_OF_IMAGES_TO_DISPLAY) ? works.size() : NUMBER_OF_IMAGES_TO_DISPLAY));
         documentNameToHTMLPage.put(indexDocumentName, htmlPage);
 
         // for each camera make, map its document name to the created HTML page
         for(Map.Entry<String, List<Work>> cameraMakeToWorks : makeIndex.entrySet()) {
             String cameraMake = cameraMakeToWorks.getKey();
             List<Work> worksOfCameraMake = cameraMakeToWorks.getValue();
-            htmlPage = buildCameraMakeHTMLPage(indexDocumentName, cameraMakeAndModelToDocumentName.get(cameraMake), worksOfCameraMake.subList(0, 10));
+            htmlPage = buildCameraMakeHTMLPage(indexDocumentName,
+                    cameraMakeAndModelToDocumentName.get(cameraMake),
+                    worksOfCameraMake.subList(0, (worksOfCameraMake.size() < NUMBER_OF_IMAGES_TO_DISPLAY) ? worksOfCameraMake.size() : NUMBER_OF_IMAGES_TO_DISPLAY));
             documentNameToHTMLPage.put(cameraMakeToDocumentName.get(cameraMake), htmlPage);
 
             for(Map.Entry<String, List<Work>> cameraModelToWorks : makeAndModelIndex.get(cameraMake).entrySet()) {
                 // create a html page for each camera make's model and map its document name to it
                 String cameraModel = cameraModelToWorks.getKey();
                 List<Work> worksOfCameraModel = cameraModelToWorks.getValue();
-                htmlPage = buildCameraMakeAndModelHTMLPage(indexDocumentName, cameraMakeToDocumentName.get(cameraMake), worksOfCameraModel.subList(0, 10));
+                htmlPage = buildCameraMakeAndModelHTMLPage(indexDocumentName,
+                        cameraMakeToDocumentName.get(cameraMake),
+                        worksOfCameraModel.subList(0, (worksOfCameraModel.size() < NUMBER_OF_IMAGES_TO_DISPLAY) ? worksOfCameraModel.size() : NUMBER_OF_IMAGES_TO_DISPLAY));
                 documentNameToHTMLPage.put(cameraMakeAndModelToDocumentName.get(cameraMake).get(cameraModel), htmlPage);
             }
         }
