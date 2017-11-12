@@ -60,4 +60,83 @@
             <resolution_unit>2</resolution_unit>
         </exif>
     </work>
+    <work>
+        <id>867035</id>
+        <filename>920668.jpg</filename>
+        <image_width>2160</image_width>
+        <image_height>2196</image_height>
+        <urls>
+            <url type="small">http://ih1.redbubble.net/work.867035.1.flat,135x135,075,f.jpg</url>
+            <url type="medium">http://ih1.redbubble.net/work.867035.1.flat,300x300,075,f.jpg</url>
+            <url type="large">http://ih1.redbubble.net/work.867035.1.flat,550x550,075,f.jpg</url>
+        </urls>
+        <exif>
+            <pixel_y_dimension>2196</pixel_y_dimension>
+            <software>Adobe Photoshop CS3 Macintosh</software>
+            <date_time>Fri Mar 14 11:50:22 +1100 2008</date_time>
+            <orientation>1</orientation>
+            <color_space>1</color_space>
+            <x_resolution>600</x_resolution>
+            <pixel_x_dimension>2160</pixel_x_dimension>
+            <resolution_unit>2</resolution_unit>
+            <y_resolution>600</y_resolution>
+            <jpeg_interchange_format>302</jpeg_interchange_format>
+            <jpeg_interchange_format_length>5205</jpeg_interchange_format_length>
+            <x_resolution>72</x_resolution>
+            <compression>6</compression>
+            <y_resolution>72</y_resolution>
+            <resolution_unit>2</resolution_unit>
+        </exif>
+    </work>
+    <work>
+        <id>2041</id>
+        <filename>2010.jpg</filename>
+        <image_width>3504</image_width>
+        <image_height>2336</image_height>
+        <urls>
+            <url type="small">http://ih1.redbubble.net/work.2041.1.flat,135x135,075,f.jpg</url>
+            <url type="medium">http://ih1.redbubble.net/work.2041.1.flat,300x300,075,f.jpg</url>
+            <url type="large">http://ih1.redbubble.net/work.2041.1.flat,550x550,075,f.jpg</url>
+        </urls>
+        <exif>
+            <flash>16</flash>
+            <pixel_y_dimension>2336</pixel_y_dimension>
+            <date_time_digitized>Wed Jul 06 13:17:27 +1000 2005</date_time_digitized>
+            <focal_plane_resolution_unit>2</focal_plane_resolution_unit>
+            <exposure_bias_value>0</exposure_bias_value>
+            <model>Canon EOS 20D</model>
+            <software>Adobe Photoshop CS Windows</software>
+            <focal_length>28</focal_length>
+            <scene_capture_type>0</scene_capture_type>
+            <iso_speed_ratings>100</iso_speed_ratings>
+            <date_time>Thu Sep 08 08:39:53 +1000 2005</date_time>
+            <custom_rendered>0</custom_rendered>
+            <make>Canon</make>
+            <orientation>1</orientation>
+            <exposure_time>1/30</exposure_time>
+            <exposure_mode>0</exposure_mode>
+            <shutter_speed_value>160789/32768</shutter_speed_value>
+            <x_resolution>72</x_resolution>
+            <metering_mode>5</metering_mode>
+            <color_space>1</color_space>
+            <f_number>4</f_number>
+            <user_comment></user_comment>
+            <white_balance>1</white_balance>
+            <focal_plane_x_resolution>233600/59</focal_plane_x_resolution>
+            <aperture_value>4</aperture_value>
+            <y_resolution>72</y_resolution>
+            <resolution_unit>2</resolution_unit>
+            <date_time_original>Wed Jul 06 13:17:27 +1000 2005</date_time_original>
+            <pixel_x_dimension>3504</pixel_x_dimension>
+            <ycb_cr_positioning>2</ycb_cr_positioning>
+            <exposure_program>2</exposure_program>
+            <focal_plane_y_resolution>233600/59</focal_plane_y_resolution>
+            <jpeg_interchange_format>1046</jpeg_interchange_format>
+            <jpeg_interchange_format_length>3898</jpeg_interchange_format_length>
+            <x_resolution>72</x_resolution>
+            <compression>6</compression>
+            <y_resolution>72</y_resolution>
+            <resolution_unit>2</resolution_unit>
+        </exif>
+    </work>
 </works>

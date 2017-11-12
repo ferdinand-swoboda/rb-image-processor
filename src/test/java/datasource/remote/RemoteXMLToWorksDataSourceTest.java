@@ -26,7 +26,7 @@ public class RemoteXMLToWorksDataSourceTest {
         underTest = new RemoteXMLToWorksDataSource(localXMLUrl);
         List<Work> works = underTest.read();
 
-        int expectedSize = 1;
+        int expectedSize = 2;
         int actualSize = works.size();
         Assert.assertEquals(expectedSize, actualSize);
 
