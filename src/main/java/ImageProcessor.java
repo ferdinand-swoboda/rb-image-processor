@@ -1,9 +1,9 @@
 import datasource.DataSource;
 import datasource.remote.RemoteXMLToWorksDataSource;
 import datatarget.DataTarget;
-import datatarget.local.HTMLToLocalFilesystemDataTarget;
+import datatarget.local.TextsToLocalFilesystemDataTarget;
 import domain.Work;
-import transformation.WorksToHTMLTransformation;
+import transformation.WorksToHTMLTextsTransformation;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class ImageProcessor {
 
     private void init(URL apiUrl, File outputDir) {
         source = new RemoteXMLToWorksDataSource(apiUrl);
-        target = new HTMLToLocalFilesystemDataTarget(outputDir);
+        target = new TextsToLocalFilesystemDataTarget(outputDir);
     }
 
     private void run() {
@@ -57,7 +57,7 @@ public class ImageProcessor {
             System.exit(1);
         }
 
-        Map<String, StringWriter> htmlPages = new WorksToHTMLTransformation().apply(works);
+        Map<String, StringWriter> htmlPages = new WorksToHTMLTextsTransformation().apply(works);
 
         try {
             target.write(htmlPages);
