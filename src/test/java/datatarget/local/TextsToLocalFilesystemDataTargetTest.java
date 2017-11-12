@@ -50,7 +50,7 @@ public class TextsToLocalFilesystemDataTargetTest {
         String actual;
 
         for(Map.Entry<String, StringWriter> page : pages.entrySet()) {
-            expected = page.toString();
+            expected = page.getValue().toString();
             try(FileInputStream inputStream = new FileInputStream(new File(outputDir, page.getKey()))) {
                 actual = IOUtils.toString(inputStream, Charset.defaultCharset());
             }

@@ -2,6 +2,7 @@ package datasource.remote;
 
 import datasource.DataSource;
 import domain.Work;
+import domain.WorkList;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -22,9 +23,13 @@ public class RemoteXMLToWorksDataSource implements DataSource<List<Work>> {
     @Override
     public List<Work> read() throws IOException{
         List<Work> result;
-        Response<List<Work>> response = webservice.getWorks().execute();
+        Response<WorkList> response = webservice.getWorks().execute();
         if (response.isSuccessful()) {
-            result = response.body();
+            if(response.body() != null) {
+                result = response.body().getWorks();
+            } else {
+                throw new IOException("Response body is empty or corrupted!");
+            }
         } else {
             throw new IOException("Response from API failed! Response code was " + response.code() + " and the error message is\n" + response.errorBody().string());
         }

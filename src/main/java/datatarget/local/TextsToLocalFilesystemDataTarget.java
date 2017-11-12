@@ -37,7 +37,7 @@ public class TextsToLocalFilesystemDataTarget implements DataTarget<Map<String, 
             }
 
             try(FileWriter fileWriter = new FileWriter(file, false)) {
-                fileWriter.write(htmlPage.toString());
+                fileWriter.write(htmlPage.getValue().toString());
             } catch (IOException e) {
                 throw new IOException("I/O error occurred while writing HTML text to file!", e);
             }

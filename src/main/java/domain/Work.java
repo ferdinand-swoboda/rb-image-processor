@@ -1,20 +1,17 @@
 package domain;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Path;
-import org.simpleframework.xml.Root;
+import org.simpleframework.xml.*;
 
-import java.util.List;
+import java.util.Map;
 
 @Root(name="work", strict = false)
 public class Work {
 
+    @Element
     private int id;
 
-    @ElementList(name = "url")
-    @Path("urls")
-    private List<String> urlsOfImages;
+    @ElementMap(name = "urls", entry = "url", key = "type", attribute = true)
+    private Map<String, String> urlsOfImages;
 
     @Element(name = "model", required = false)
     @Path("exif")
@@ -24,7 +21,9 @@ public class Work {
     @Path("exif")
     private String exif_make;
 
-    public Work(int id, List<String> urlsOfImages, String exif_model, String exif_make) {
+    public Work() {}
+
+    public Work(int id, Map<String, String> urlsOfImages, String exif_model, String exif_make) {
         this.id = id;
         this.urlsOfImages = urlsOfImages;
         this.exif_model = exif_model;
@@ -37,14 +36,6 @@ public class Work {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public List<String> getUrlsOfImages() {
-        return urlsOfImages;
-    }
-
-    public void setUrlsOfImages(List<String> urlsOfImages) {
-        this.urlsOfImages = urlsOfImages;
     }
 
     public String getExif_model() {
