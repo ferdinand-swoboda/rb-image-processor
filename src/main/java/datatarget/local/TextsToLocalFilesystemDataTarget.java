@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 
-public class HTMLToLocalFilesystemDataTarget implements DataTarget<Map<String, StringWriter>> {
+public class TextsToLocalFilesystemDataTarget implements DataTarget<Map<String, StringWriter>> {
 
     private File outputDirectory;
 
-    public HTMLToLocalFilesystemDataTarget(File outputDirectory) {
+    public TextsToLocalFilesystemDataTarget(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 

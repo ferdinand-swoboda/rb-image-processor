@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class WorksToHTMLTransformation implements Transformation<List<Work>, Map<String, StringWriter>> {
+public class WorksToHTMLTextsTransformation implements Transformation<List<Work>, Map<String, StringWriter>> {
 
     private ITemplateEngine templateEngine;
 
-    public WorksToHTMLTransformation() {
+    public WorksToHTMLTextsTransformation() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setPrefix("/templates/");
