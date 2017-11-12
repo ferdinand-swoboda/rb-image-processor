@@ -13,7 +13,7 @@ import java.util.List;
 
 public class RemoteXMLToWorksDataSource implements DataSource<List<Work>> {
 
-    private WorkWebservice webservice;
+    private final WorkWebservice webservice;
 
     public RemoteXMLToWorksDataSource(URL apiUrl) {
         webservice = new Retrofit.Builder()

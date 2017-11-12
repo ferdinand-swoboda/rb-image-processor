@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class TextsToLocalFilesystemDataTarget implements DataTarget<Map<String, StringWriter>> {
 
-    private File outputDirectory;
+    private final File outputDirectory;
 
     public TextsToLocalFilesystemDataTarget(File outputDirectory) {
         this.outputDirectory = outputDirectory;

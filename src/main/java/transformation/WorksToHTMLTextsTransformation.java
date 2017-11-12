@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 public class WorksToHTMLTextsTransformation implements Transformation<List<Work>, Map<String, StringWriter>> {
 
     private static final int NUMBER_OF_IMAGES_TO_DISPLAY = 10;
-    public static final String TEMPLATES_DIR = "/templates/";
-    public static final String TEMPLATES_SUFFIX = ".html";
+    private static final String TEMPLATES_DIR = "/templates/";
+    private static final String TEMPLATES_SUFFIX = ".html";
 
-    private ITemplateEngine templateEngine;
+    private final ITemplateEngine templateEngine;
 
     public WorksToHTMLTextsTransformation() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
