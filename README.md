@@ -3,12 +3,6 @@ The application is a batch image processor that takes a work image API URL and a
 
 The application is written in Java as a Gradle (dependency manager similar to Maven) project. Therefore, at least JDK 1.8 is required. 
 
-## Usage
-The project comes with a build/install/bin subfolder that contains ready-to-use start scripts for both Windows and Unix systems.
-To execute the application on e.g. Windows run the following command in the aforementioned subfolder:
-
-`rb-image-processor http://take-home-test.herokuapp.com/api/ C:\Users\<username>\Desktop\htmlPages`
-
 ## Development
 As this is a Gradle project, it can be easily imported as such in the IDE of your choice, preferably IntelliJ IDEA.
 The Gradle configuration supports multiple tasks and wraps a self-contained Gradle installation meaning a system installation of Gradle is not required. This means, you can run any Gradle task in your project using the gradlew shell script or bat file located in the root directory.
@@ -22,10 +16,21 @@ From within the project's root directory, you can execute any Gradle task by run
 where <task> is replaced with test/build/installDist/clean etc.
 Arguments have to be changed accordingly, if necessary.
 
+
+## Usage
+After the project has been installed the project's root directory has a subfolder build/install/bin subfolder that contains ready-to-use start scripts for both Windows and Unix systems.
+To execute the application on e.g. Windows run the following command in the aforementioned subfolder:
+
+`rb-image-processor http://take-home-test.herokuapp.com/api/ C:\Users\<username>\Desktop\htmlPages`
+
 ## Architecture
 TODO Things like why you made certain decisions, how you architected your code
 
 ## Comments
-Java, Gradle and the Retrofit as well as Thymeleaf library were chosen due to familiarity and because they need minimum configuration to solve their tasks at hand.
+Java, Gradle and the Retrofit as well as Thymeleaf library were chosen due to familiarity and because they need minimum configuration to solve the given task at hand.
 
-TODO shortcomings with your code, etc. We generally read this first, and this gives us a good impression of what you were thinking, and helps us gauge your code. 
+Currently, the application performs all transformation steps strictly sequentially. Since it is intended as a batch processor handling a moderate amount of data this is considered fine. 
+The application also writes the set of generated HTML pages directly in the output directory. Specifically, it does not create a subfolder structure reflecting the HTML page hierarchy with index.html at the top and a second layer of directories for each camera make.
+Due to unavailability of Unix systems, the code has not been tested thoroughly on macOS etc. 
+
+At last, have fun diving in the code!
