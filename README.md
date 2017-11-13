@@ -27,7 +27,7 @@ At a high level, the task the application sets out to solve is a transformation,
 
 Consequently, the processor is built after the idea of a pipeline that reads data from a data source, applies one (or multiple transformations) to it and writes the results to a data target.
 
-You will find three packages datasource, data target and transformation in the code base that encapsulate these functionalities and are separated by generic interfaces so that it is easy to add other data sources or targets etc. A fourth package, domain, contains the internal data abstraction Work that represents a work image and its camera make, model etc.
+You will find three packages datasource, datatarget and transformation in the code base that encapsulate these functionalities and are separated by generic interfaces so that it is easy to add other data sources or targets etc. A fourth package, domain, contains the internal data abstraction Work that represents a work image and its camera make, model etc.
 
 Because the data source accesses its, as XML persisted, data remotely, the type-safe HTTP client Retrofit takes over all the heavy lifting of requesting the XML document and parsing it into our internal abstraction class.
 
@@ -40,7 +40,7 @@ The transformation part is the complicated one. It is split up in three parts:
 The set of HTML pages or, better, HTML texts as referred to in the code base is then written to the local file system by the data target. It uses the HTML text name as the file name of the HTML text body to be written in the output directory.
 
 ## Comments
-Java, Gradle and the Retrofit as well as Thymeleaf library were chosen due to familiarity and because they need minimum configuration to solve the given task at hand. Both can easily replaced with alternatives.
+Java, Gradle and the Retrofit as well as Thymeleaf library were chosen due to familiarity and because they need minimum configuration to solve the given task at hand. Both can be replaced with alternatives easily.
 
 Currently, the application performs all transformation steps strictly sequentially. Since it is intended as a batch processor handling a moderate amount of data and given that only the pure HTML generation could be parallelised this is considered to be acceptable. 
 
