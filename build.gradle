@@ -1,7 +1,24 @@
 group 'com.redbubble.intern.coding-test'
-version '1.0-SNAPSHOT'
+version '1.0'
 
+apply plugin: 'application'
 apply plugin: 'java'
+
+mainClassName = "ImageProcessor"
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ImageProcessor'
+        )
+    }
+}
 
 sourceCompatibility = 1.8
 
@@ -10,8 +27,18 @@ repositories {
 }
 
 dependencies {
+    // test framework
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    // HTML template engine
     // https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf
     compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.9.RELEASE'
+    // HTTP client library
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-simplexml:2.3.0'
+    // I/O utility library
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    // logging framework
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
+    testCompile group: 'org.slf4j', name: 'slf4j-nop', version: '1.8.0-beta0'
 }

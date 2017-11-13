@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Images</title>
+    <style type="text/css">
+        nav {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Images</h1>
+
+    <nav>
+        <div style="float: left" th:each="cameraMakePageLink : ${cameraMakePageLinks}">
+            <a th:text="|Images of ${cameraMakePageLink.key}|" th:href="${cameraMakePageLink.value}"></a> |
+        </div>
+    </nav>
+
+</header>
+
+<div th:each="work : ${works}">
+    <img th:src="${work.urlsOfImages['large']}" alt="Work image" />
+</div>
+
+</body>
+</html>
