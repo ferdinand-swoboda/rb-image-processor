@@ -32,9 +32,9 @@ public class TextsToLocalFilesystemDataTargetTest {
     }
 
     @Test
-    public void writingTextsShouldWriteAllFiles() throws IOException {
-        Map<String, StringWriter> pages = createPages();
-        underTest.write(pages);
+    public void writingTextsShouldWriteAllTexts() throws IOException {
+        Map<String, StringWriter> texts = createTexts();
+        underTest.write(texts);
 
         int expected = 3;
         int actual = outputDir.listFiles().length;
@@ -43,13 +43,13 @@ public class TextsToLocalFilesystemDataTargetTest {
 
     @Test
     public void writingTextsShouldPersistFilesCorrectly() throws IOException {
-        Map<String, StringWriter> pages = createPages();
-        underTest.write(pages);
+        Map<String, StringWriter> texts = createTexts();
+        underTest.write(texts);
 
         String expected;
         String actual;
 
-        for(Map.Entry<String, StringWriter> page : pages.entrySet()) {
+        for(Map.Entry<String, StringWriter> page : texts.entrySet()) {
             expected = page.getValue().toString();
             try(FileInputStream inputStream = new FileInputStream(new File(outputDir, page.getKey()))) {
                 actual = IOUtils.toString(inputStream, Charset.defaultCharset());
@@ -58,17 +58,17 @@ public class TextsToLocalFilesystemDataTargetTest {
         }
     }
 
-    private Map<String, StringWriter> createPages() {
+    private Map<String, StringWriter> createTexts() {
         Map<String, StringWriter> pages = new HashMap<>();
-        pages.put("page1.txt", createPage(1));
-        pages.put("page2.txt", createPage(2));
-        pages.put("page3.txt", createPage(3));
+        pages.put("page1.txt", createText(1));
+        pages.put("page2.txt", createText(2));
+        pages.put("page3.txt", createText(3));
         return  pages;
     }
 
-    private StringWriter createPage(int id) {
+    private StringWriter createText(int id) {
         StringWriter page = new StringWriter();
-        page.append("This the text of page " + id + ".");
+        page.append("This the text of text " + id + ".");
         return page;
     }
 }
