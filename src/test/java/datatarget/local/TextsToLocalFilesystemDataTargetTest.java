@@ -49,6 +49,7 @@ public class TextsToLocalFilesystemDataTargetTest {
         String expected;
         String actual;
 
+        // checks if the data body was written correctly and if it was mapped to the correct text name
         for(Map.Entry<String, StringWriter> page : texts.entrySet()) {
             expected = page.getValue().toString();
             try(FileInputStream inputStream = new FileInputStream(new File(outputDir, page.getKey()))) {

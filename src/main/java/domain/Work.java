@@ -4,19 +4,34 @@ import org.simpleframework.xml.*;
 
 import java.util.Map;
 
+/**
+ * Represents a work with image data
+ */
 @Root(name="work", strict = false)
 public class Work {
 
+    /**
+     * the work's id
+     */
     @Element
     private int id;
 
+    /**
+     * the url of the image of this work in three different versions based on the image type {small, medium, large}
+     */
     @ElementMap(name = "urls", entry = "url", key = "type", attribute = true)
     private Map<String, String> urlsOfImages;
 
+    /**
+     * the camera model used to shoot the work's image
+     */
     @Element(name = "model", required = false)
     @Path("exif")
     private String exif_model;
 
+    /**
+     * the camera make used to shoot the work's image
+     */
     @Element(name = "make", required = false)
     @Path("exif")
     private String exif_make;

@@ -13,11 +13,26 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An image processor that retrieves work image data from an API URL, generates a static set of HTML pages of the image data
+ * and writes the HTML pages to the local filesystem.
+ * It takes two command line arguments, the API URL and the file directory to be written to.
+ */
 public class ImageProcessor {
 
+    /**
+     * the source of the list of works
+     */
     private DataSource<List<Work>> source;
+    /**
+     * the target of the HTML texts
+     */
     private DataTarget<Map<String, StringWriter>> target;
 
+    /**
+     * Reads the required 2 command line arguments, sets data source and target and starts the process
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
 
         if (args.length != 2){
@@ -41,11 +56,20 @@ public class ImageProcessor {
         processor.run();
     }
 
+    /**
+     * Sets data source and target based on the given API URL and output file directory
+     * @param apiUrl the given API URL
+     * @param outputDir the given output file directory
+     */
     private void init(URL apiUrl, File outputDir) {
         source = new RemoteXMLToWorksDataSource(apiUrl);
         target = new TextsToLocalFilesystemDataTarget(outputDir);
     }
 
+    /**
+     * Processes the data obtained from the data source using a works to HTML transformation and
+     * writes the resulting HTML texts to the data target
+     */
     private void run() {
         List<Work> works = null;
 

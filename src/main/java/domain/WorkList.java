@@ -6,6 +6,9 @@ import org.simpleframework.xml.Root;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents the root XML element of the XML-encoded work data
+ */
 @Root(name = "works", strict = false)
 public class WorkList {
 
